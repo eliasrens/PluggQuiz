@@ -17,16 +17,48 @@
             <p class="text-gray-400 mt-2">Klistra in dina frågor och generera ett quiz på sekunder</p>
         </div>
 
-        <!-- Steg 1: JSON-formulär -->
-        <div id="step-create" class="bg-gray-900 rounded-2xl border border-gray-800 p-6">
-            <label for="json-input" class="block text-sm font-medium text-gray-300 mb-2">
-                Klistra in ditt JSON-frågeformat:
-            </label>
-            <textarea
-                id="json-input"
-                rows="12"
-                class="w-full bg-gray-800 border border-gray-700 rounded-xl p-4 font-mono text-sm text-gray-200 placeholder-gray-500 focus:ring-2 focus:ring-violet-500 focus:border-violet-500 resize-vertical"
-                placeholder='[
+        <!-- Inloggning -->
+        <div id="step-login" class="bg-gray-900 rounded-2xl border border-gray-800 p-6">
+            <h2 class="text-lg font-semibold text-white mb-4">Logga in som lärare</h2>
+            <div class="space-y-3">
+                <input
+                    id="login-username"
+                    type="text"
+                    placeholder="Användarnamn"
+                    class="w-full bg-gray-800 border border-gray-700 rounded-xl p-3 text-gray-200 placeholder-gray-500 focus:ring-2 focus:ring-violet-500 focus:border-violet-500"
+                >
+                <input
+                    id="login-password"
+                    type="password"
+                    placeholder="Lösenord"
+                    onkeydown="if(event.key==='Enter') login()"
+                    class="w-full bg-gray-800 border border-gray-700 rounded-xl p-3 text-gray-200 placeholder-gray-500 focus:ring-2 focus:ring-violet-500 focus:border-violet-500"
+                >
+                <div id="login-error" class="hidden p-3 bg-red-900/50 border border-red-800 rounded-xl text-red-300 text-sm"></div>
+                <button
+                    onclick="login()"
+                    id="login-btn"
+                    class="w-full bg-violet-600 hover:bg-violet-500 text-white font-semibold py-3 px-6 rounded-xl transition-colors duration-200"
+                >
+                    Logga in
+                </button>
+            </div>
+        </div>
+
+        <!-- Steg 1: JSON-formulär (dolt tills inloggad) -->
+        <div id="step-create" class="hidden">
+            <div class="flex justify-end mb-4">
+                <button onclick="logout()" class="text-gray-500 hover:text-gray-300 text-sm">Logga ut</button>
+            </div>
+            <div class="bg-gray-900 rounded-2xl border border-gray-800 p-6">
+                <label for="json-input" class="block text-sm font-medium text-gray-300 mb-2">
+                    Klistra in ditt JSON-frågeformat:
+                </label>
+                <textarea
+                    id="json-input"
+                    rows="12"
+                    class="w-full bg-gray-800 border border-gray-700 rounded-xl p-4 font-mono text-sm text-gray-200 placeholder-gray-500 focus:ring-2 focus:ring-violet-500 focus:border-violet-500 resize-vertical"
+                    placeholder='[
   {
     "question": "Vad är Sveriges huvudstad?",
     "options": ["Oslo", "Stockholm", "Köpenhamn", "Helsingfors"],
@@ -35,20 +67,24 @@
   }
 ]'></textarea>
 
-            <!-- Felmeddelande -->
-            <div id="error-message" class="hidden mt-3 p-3 bg-red-900/50 border border-red-800 rounded-xl text-red-300 text-sm"></div>
+                <!-- Felmeddelande -->
+                <div id="error-message" class="hidden mt-3 p-3 bg-red-900/50 border border-red-800 rounded-xl text-red-300 text-sm"></div>
 
-            <button
-                id="generate-btn"
-                onclick="generateQuiz()"
-                class="mt-4 w-full bg-violet-600 hover:bg-violet-500 text-white font-semibold py-3 px-6 rounded-xl transition-colors duration-200"
-            >
-                Generera Quiz
-            </button>
+                <button
+                    id="generate-btn"
+                    onclick="generateQuiz()"
+                    class="mt-4 w-full bg-violet-600 hover:bg-violet-500 text-white font-semibold py-3 px-6 rounded-xl transition-colors duration-200"
+                >
+                    Generera Quiz
+                </button>
+            </div>
         </div>
 
         <!-- Steg 2: Länk & QR-kod -->
         <div id="step-result" class="hidden">
+            <div class="flex justify-end mb-4">
+                <button onclick="logout()" class="text-gray-500 hover:text-gray-300 text-sm">Logga ut</button>
+            </div>
             <div class="bg-gray-900 rounded-2xl border border-gray-800 p-6 text-center">
                 <div class="mb-6">
                     <svg class="mx-auto h-12 w-12 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">

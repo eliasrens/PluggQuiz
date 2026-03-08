@@ -1,3 +1,64 @@
+// ============================================
+// AUTENTISERING
+// ============================================
+
+// Kolla om redan inloggad vid sidladdning
+async function checkAuth() {
+    const { data: { session } } = await db.auth.getSession();
+    if (session) {
+        document.getElementById('step-login').classList.add('hidden');
+        document.getElementById('step-create').classList.remove('hidden');
+    }
+}
+
+async function login() {
+    const username = document.getElementById('login-username').value.trim().toLowerCase();
+    const password = document.getElementById('login-password').value;
+    const errorEl = document.getElementById('login-error');
+    errorEl.classList.add('hidden');
+
+    if (!username || !password) {
+        errorEl.textContent = 'Fyll i användarnamn och lösenord.';
+        errorEl.classList.remove('hidden');
+        return;
+    }
+
+    const email = username + '@pluggquiz.se';
+
+    const btn = document.getElementById('login-btn');
+    btn.disabled = true;
+    btn.textContent = 'Loggar in...';
+
+    const { error } = await db.auth.signInWithPassword({ email, password });
+
+    if (error) {
+        errorEl.textContent = 'Fel e-post eller lösenord.';
+        errorEl.classList.remove('hidden');
+        btn.disabled = false;
+        btn.textContent = 'Logga in';
+        return;
+    }
+
+    document.getElementById('step-login').classList.add('hidden');
+    document.getElementById('step-create').classList.remove('hidden');
+    btn.disabled = false;
+    btn.textContent = 'Logga in';
+}
+
+async function logout() {
+    await db.auth.signOut();
+    document.getElementById('step-create').classList.add('hidden');
+    document.getElementById('step-result').classList.add('hidden');
+    document.getElementById('step-login').classList.remove('hidden');
+}
+
+// Kör vid sidladdning
+checkAuth();
+
+// ============================================
+// QUIZ-HANTERING
+// ============================================
+
 // Generera ett kort unikt ID (8 tecken)
 function generateId() {
     const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
