@@ -32,8 +32,9 @@ async function login() {
     const { error } = await db.auth.signInWithPassword({ email, password });
 
     if (error) {
-        errorEl.textContent = 'Fel e-post eller lösenord.';
+        errorEl.textContent = 'Fel användarnamn eller lösenord. (' + error.message + ')';
         errorEl.classList.remove('hidden');
+        console.error('Login error:', error);
         btn.disabled = false;
         btn.textContent = 'Logga in';
         return;
