@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PluggQuiz - Skapa Quiz</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-gray-950 min-h-screen">
+    <div class="max-w-2xl mx-auto px-4 py-12">
+        <!-- Header -->
+        <div class="text-center mb-10">
+            <h1 class="text-4xl font-bold text-white">Plugg<span class="text-violet-400">Quiz</span></h1>
+            <p class="text-gray-400 mt-2">Klistra in dina frågor och generera ett quiz på sekunder</p>
+        </div>
+
+        <!-- Steg 1: JSON-formulär -->
+        <div id="step-create" class="bg-gray-900 rounded-2xl border border-gray-800 p-6">
+            <label for="json-input" class="block text-sm font-medium text-gray-300 mb-2">
+                Klistra in ditt JSON-frågeformat:
+            </label>
+            <textarea
+                id="json-input"
+                rows="12"
+                class="w-full bg-gray-800 border border-gray-700 rounded-xl p-4 font-mono text-sm text-gray-200 placeholder-gray-500 focus:ring-2 focus:ring-violet-500 focus:border-violet-500 resize-vertical"
+                placeholder='[
+  {
+    "question": "Vad är Sveriges huvudstad?",
+    "options": ["Oslo", "Stockholm", "Köpenhamn", "Helsingfors"],
+    "correct_answer": "Stockholm",
+    "explanation": "Stockholm har varit Sveriges huvudstad sedan 1436."
+  }
+]'></textarea>
+
+            <!-- Felmeddelande -->
+            <div id="error-message" class="hidden mt-3 p-3 bg-red-900/50 border border-red-800 rounded-xl text-red-300 text-sm"></div>
+
+            <button
+                id="generate-btn"
+                onclick="generateQuiz()"
+                class="mt-4 w-full bg-violet-600 hover:bg-violet-500 text-white font-semibold py-3 px-6 rounded-xl transition-colors duration-200"
+            >
+                Generera Quiz
+            </button>
+        </div>
+
+        <!-- Steg 2: Länk & QR-kod -->
+        <div id="step-result" class="hidden">
+            <div class="bg-gray-900 rounded-2xl border border-gray-800 p-6 text-center">
+                <div class="mb-6">
+                    <svg class="mx-auto h-12 w-12 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    <h2 class="text-2xl font-bold text-white mt-3">Quiz skapat!</h2>
+                    <p class="text-gray-400 mt-1">Dela länken eller QR-koden med dina elever</p>
+                </div>
+
+                <!-- Länk -->
+                <div class="flex items-center gap-2 bg-gray-800 rounded-xl p-3 mb-6">
+                    <input
+                        id="quiz-link"
+                        type="text"
+                        readonly
+                        class="flex-1 bg-transparent text-gray-200 text-sm font-mono outline-none"
+                    >
+                    <button
+                        onclick="copyLink()"
+                        class="bg-violet-600 hover:bg-violet-500 text-white text-sm font-medium py-2 px-4 rounded-lg transition-colors"
+                    >
+                        Kopiera
+                    </button>
+                </div>
+
+                <!-- QR-kod -->
+                <div class="flex justify-center mb-6">
+                    <div id="qr-code" class="bg-white p-3 rounded-xl"></div>
+                </div>
+
+                <!-- Skapa nytt -->
+                <button
+                    onclick="resetForm()"
+                    class="text-violet-400 hover:text-violet-300 font-medium text-sm"
+                >
+                    ← Skapa ett nytt quiz
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/supabase.js"></script>
+    <script src="js/teacher.js"></script>
+</body>
+</html>
