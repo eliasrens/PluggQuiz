@@ -45,15 +45,55 @@
             </div>
         </div>
 
-        <!-- Steg 1: JSON-formulär (dolt tills inloggad) -->
+        <!-- Dashboard (dolt tills inloggad) -->
+        <div id="step-dashboard" class="hidden">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-lg font-semibold text-white">Dina quizar</h2>
+                <div class="flex gap-3">
+                    <button onclick="showCreateForm()" class="bg-violet-600 hover:bg-violet-500 text-white text-sm font-medium py-2 px-4 rounded-lg transition-colors">
+                        + Skapa nytt quiz
+                    </button>
+                    <button onclick="logout()" class="text-gray-500 hover:text-gray-300 text-sm py-2">Logga ut</button>
+                </div>
+            </div>
+
+            <!-- Quiz-lista -->
+            <div id="quiz-list" class="space-y-3">
+                <p class="text-gray-500 text-center py-8">Laddar...</p>
+            </div>
+        </div>
+
+        <!-- Skapa/Redigera quiz -->
         <div id="step-create" class="hidden">
-            <div class="flex justify-end mb-4">
+            <div class="flex justify-between items-center mb-4">
+                <button onclick="showDashboard()" class="text-gray-400 hover:text-gray-200 text-sm">← Tillbaka</button>
                 <button onclick="logout()" class="text-gray-500 hover:text-gray-300 text-sm">Logga ut</button>
             </div>
             <div class="bg-gray-900 rounded-2xl border border-gray-800 p-6">
-                <label for="json-input" class="block text-sm font-medium text-gray-300 mb-2">
-                    Klistra in ditt JSON-frågeformat:
+                <h2 id="form-title" class="text-lg font-semibold text-white mb-4">Skapa nytt quiz</h2>
+
+                <label for="quiz-name" class="block text-sm font-medium text-gray-300 mb-2">
+                    Namnge ditt quiz:
                 </label>
+                <input
+                    id="quiz-name"
+                    type="text"
+                    placeholder="T.ex. Geografi - Europa"
+                    class="w-full bg-gray-800 border border-gray-700 rounded-xl p-3 text-gray-200 placeholder-gray-500 focus:ring-2 focus:ring-violet-500 focus:border-violet-500 mb-4"
+                >
+
+                <div class="flex items-center justify-between mb-2">
+                    <label for="json-input" class="block text-sm font-medium text-gray-300">
+                        Klistra in ditt JSON-frågeformat:
+                    </label>
+                    <button
+                        onclick="copyAIPrompt()"
+                        id="copy-prompt-btn"
+                        class="text-xs text-violet-400 hover:text-violet-300 bg-violet-900/30 hover:bg-violet-900/50 border border-violet-800/50 py-1.5 px-3 rounded-lg transition-colors"
+                    >
+                        Kopiera AI-prompt
+                    </button>
+                </div>
                 <textarea
                     id="json-input"
                     rows="12"
@@ -72,17 +112,18 @@
 
                 <button
                     id="generate-btn"
-                    onclick="generateQuiz()"
+                    onclick="saveQuiz()"
                     class="mt-4 w-full bg-violet-600 hover:bg-violet-500 text-white font-semibold py-3 px-6 rounded-xl transition-colors duration-200"
                 >
-                    Generera Quiz
+                    Spara Quiz
                 </button>
             </div>
         </div>
 
-        <!-- Steg 2: Länk & QR-kod -->
+        <!-- Resultat: Länk & QR-kod -->
         <div id="step-result" class="hidden">
-            <div class="flex justify-end mb-4">
+            <div class="flex justify-between items-center mb-4">
+                <button onclick="showDashboard()" class="text-gray-400 hover:text-gray-200 text-sm">← Tillbaka</button>
                 <button onclick="logout()" class="text-gray-500 hover:text-gray-300 text-sm">Logga ut</button>
             </div>
             <div class="bg-gray-900 rounded-2xl border border-gray-800 p-6 text-center">
@@ -90,7 +131,7 @@
                     <svg class="mx-auto h-12 w-12 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
-                    <h2 class="text-2xl font-bold text-white mt-3">Quiz skapat!</h2>
+                    <h2 id="result-title" class="text-2xl font-bold text-white mt-3">Quiz sparat!</h2>
                     <p class="text-gray-400 mt-1">Dela länken eller QR-koden med dina elever</p>
                 </div>
 
@@ -115,12 +156,11 @@
                     <div id="qr-code" class="bg-white p-3 rounded-xl"></div>
                 </div>
 
-                <!-- Skapa nytt -->
                 <button
-                    onclick="resetForm()"
+                    onclick="showDashboard()"
                     class="text-violet-400 hover:text-violet-300 font-medium text-sm"
                 >
-                    ← Skapa ett nytt quiz
+                    ← Tillbaka till dina quizar
                 </button>
             </div>
         </div>
